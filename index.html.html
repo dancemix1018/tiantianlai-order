@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天天來海南雞・辦公室訂餐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#C94B1C;--orange-dark:#9E3510;--orange-deep:#7A2608;
+  --gold:#B8860B;--gold-lt:#D4A017;
+  --bg:#F7EDD8;--cream:#FFFAF0;
+  --brown:#2C1608;--brown-mid:#6B3A1F;--brown-lt:#9C6040;
+}
+body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(--brown);max-width:480px;margin:0 auto;min-height:100vh}
+
+.header{background:var(--orange-dark)}
+.stripe-top{height:7px;background:repeating-linear-gradient(90deg,var(--gold-lt) 0,var(--gold-lt) 12px,var(--orange-deep) 12px,var(--orange-deep) 24px)}
+.header-body{display:flex;align-items:center;gap:12px;padding:12px 16px 14px}
+.logo-wrap{width:58px;height:58px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+.header-text{flex:1}
+.h-brand{font-family:'Noto Serif TC',serif;font-size:22px;font-weight:900;color:#FFF3E0;letter-spacing:.06em;line-height:1.1}
+.h-en{font-size:9.5px;color:rgba(255,243,224,.58);letter-spacing:.14em;margin-top:3px}
+.h-tag{background:var(--gold-lt);color:var(--orange-deep);font-size:11px;font-weight:700;padding:4px 10px;border-radius:2px;letter-spacing:.08em;white-space:nowrap;font-family:'Noto Serif TC',serif;border:1.5px solid var(--gold)}
+.stripe-btm{height:4px;background:var(--gold-lt);opacity:.8}
+
+.tabs{display:flex;background:#1E0A00;border-bottom:3px solid var(--gold-lt)}
+.tab{flex:1;padding:12px 8px;background:none;border:none;cursor:pointer;font-size:14px;font-weight:500;color:rgba(255,243,224,.48);font-family:'Noto Sans TC',sans-serif;border-bottom:3px solid transparent;margin-bottom:-3px;transition:.15s;letter-spacing:.04em}
+.tab.on{color:var(--gold-lt);border-bottom-color:var(--gold-lt)}
+.badge{background:var(--orange);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:5px;font-weight:700}
+
+/* 收單室 ID 橫幅 */
+.room-bar{background:var(--orange-deep);color:rgba(255,243,224,.9);font-size:12px;text-align:center;padding:7px 16px;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.04em}
+.room-id{font-weight:700;color:var(--gold-lt);font-family:'Noto Serif TC',serif;font-size:13px;letter-spacing:.1em}
+.room-copy{background:none;border:1px solid rgba(212,160,23,.5);color:var(--gold-lt);font-size:11px;padding:2px 8px;border-radius:2px;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+.room-copy:hover{background:rgba(212,160,23,.15)}
+
+.content{padding:14px 14px 32px}
+
+.sec-hd{display:flex;align-items:center;gap:8px;margin:20px 0 9px}
+.sec-line{flex:1;height:1px;background:var(--brown-lt);opacity:.3}
+.sec-inner{display:flex;align-items:center;gap:6px;background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;padding:3px 10px;border-radius:2px}
+
+.mcard{background:var(--cream);border:1px solid rgba(107,58,31,.18);border-left:5px solid var(--orange);border-radius:4px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px;transition:border-left-color .15s,box-shadow .15s}
+.mcard.sel{border-left-color:var(--gold-lt);box-shadow:0 1px 6px rgba(201,75,28,.15)}
+.mcard-emoji{font-size:24px;flex-shrink:0;width:32px;text-align:center}
+.mcard-info{flex:1;min-width:0}
+.mcard-name{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--brown);line-height:1.3}
+.mcard-en{font-size:10px;color:var(--brown-lt);opacity:.75;margin-top:1px;letter-spacing:.02em}
+.mcard-desc{font-size:11px;color:var(--brown-mid);margin-top:3px;opacity:.82;line-height:1.55}
+.mcard-price{display:inline-block;background:var(--orange);color:#fff;font-size:12px;font-weight:700;padding:2px 9px;border-radius:2px;margin-top:5px}
+
+.qty{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qbtn{width:30px;height:30px;border-radius:50%;border:2px solid var(--orange);background:none;cursor:pointer;font-size:17px;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:center;transition:.15s;line-height:1;padding-bottom:1px}
+.qbtn:hover{background:var(--orange);color:#fff}
+.qbtn.z{border-color:rgba(107,58,31,.22);color:rgba(107,58,31,.28)}
+.qnum{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;min-width:22px;text-align:center;color:var(--brown)}
+
+.input-box{background:var(--cream);border:1px solid rgba(107,58,31,.18);border-radius:4px;padding:14px;margin-bottom:10px}
+.ilbl{font-size:11px;font-weight:700;color:var(--brown-lt);letter-spacing:.12em;margin-bottom:7px}
+.req{color:var(--orange)}
+.inp{width:100%;padding:9px 12px;border:1px solid rgba(107,58,31,.28);border-radius:3px;font-size:15px;background:var(--bg);color:var(--brown);font-family:'Noto Sans TC',sans-serif;outline:none}
+.inp:focus{border-color:var(--orange);background:var(--cream)}
+.txta{width:100%;padding:9px 12px;border:1px solid rgba(107,58,31,.28);border-radius:3px;font-size:13px;background:var(--bg);color:var(--brown);font-family:'Noto Sans TC',sans-serif;outline:none;resize:none;margin-top:8px}
+.txta:focus{border-color:var(--orange);background:var(--cream)}
+
+.sumbar{background:#1E0A00;border-radius:4px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px}
+.suml{font-size:13px;color:rgba(255,243,224,.7)}
+.sumr{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:900;color:var(--gold-lt)}
+
+.sub-btn{width:100%;padding:15px;background:var(--orange);color:#FFF3E0;border:none;border-radius:4px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Noto Serif TC',serif;letter-spacing:.06em;border-bottom:4px solid var(--orange-deep);transition:.15s}
+.sub-btn:hover{background:var(--orange-dark)}
+.sub-btn:disabled{background:rgba(107,58,31,.13);color:rgba(107,58,31,.35);border-bottom-color:transparent;cursor:default}
+
+.grand{background:#1E0A00;border-radius:4px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:4px solid var(--gold-lt)}
+.grand-lbl{font-size:11px;color:rgba(255,243,224,.55);letter-spacing:.1em}
+.grand-amt{font-family:'Noto Serif TC',serif;font-size:30px;font-weight:900;color:var(--gold-lt);margin-top:3px}
+.grand-cnt{font-size:11px;color:rgba(255,243,224,.4);margin-top:3px;letter-spacing:.06em}
+.grand-logo{width:46px;height:46px;opacity:.75}
+
+/* 即時狀態指示 */
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#4CAF50;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.live-label{font-size:11px;color:rgba(255,243,224,.6);letter-spacing:.06em}
+
+.ocard{background:var(--cream);border:1px solid rgba(107,58,31,.15);border-radius:4px;padding:12px 14px;margin-bottom:8px}
+.ohead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:7px;border-bottom:1px dashed rgba(107,58,31,.2)}
+.operson{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--brown);display:flex;align-items:center;gap:7px}
+.pav{width:28px;height:28px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700}
+.ototal{font-size:14px;font-weight:700;color:var(--orange)}
+.orow{display:flex;justify-content:space-between;font-size:13px;color:var(--brown-mid);padding:3px 0}
+.onote{font-size:11px;color:var(--brown-mid);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px dashed rgba(107,58,31,.15);opacity:.8}
+.rmbtn{background:none;border:none;cursor:pointer;font-size:11px;color:rgba(107,58,31,.4);margin-top:8px;padding:0;font-family:'Noto Sans TC',sans-serif}
+.rmbtn:hover{color:var(--orange)}
+
+.copy-btn{width:100%;padding:13px;background:var(--gold-lt);color:var(--brown);border:none;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-bottom:8px;border-bottom:3px solid var(--gold);transition:.15s}
+.copy-btn:hover{background:var(--gold);color:var(--cream)}
+.clr-btn{width:100%;padding:9px;background:none;border:1px solid rgba(201,75,28,.3);border-radius:4px;font-size:12px;cursor:pointer;color:rgba(201,75,28,.7);font-family:'Noto Sans TC',sans-serif}
+.clr-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+.toast{border-radius:4px;padding:10px 14px;font-size:13px;margin-bottom:12px;letter-spacing:.03em}
+.toast.ok{background:#1A6B2A;color:#fff}
+.toast.err{background:#8B1E10;color:#fff}
+.toast.info{background:#1E0A00;color:var(--gold-lt)}
+
+.divider{display:flex;align-items:center;gap:8px;margin:6px 0 12px}
+.div-line{flex:1;height:1px;background:rgba(107,58,31,.18)}
+.div-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-lt)}
+
+.empty{text-align:center;padding:48px 20px;color:rgba(107,58,31,.5)}
+.empty-ico{font-size:54px;margin-bottom:14px;opacity:.6}
+.empty-t{font-size:14px;margin-bottom:6px}
+.empty-s{font-size:12px;opacity:.7}
+
+/* 載入中 */
+.loading{text-align:center;padding:40px 20px;color:rgba(107,58,31,.5)}
+.loading-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin:0 3px;animation:bounce 1.2s infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+
+.footer{text-align:center;padding:20px;font-size:11px;color:rgba(107,58,31,.42);letter-spacing:.12em}
+
+/* 收單室設定 */
+.room-setup{background:var(--cream);border:1px solid rgba(107,58,31,.18);border-radius:4px;padding:20px;margin-bottom:12px;text-align:center}
+.room-setup-title{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;color:var(--brown);margin-bottom:8px}
+.room-setup-sub{font-size:12px;color:var(--brown-mid);margin-bottom:16px;line-height:1.6}
+.room-setup-btns{display:flex;gap:8px}
+.btn-primary{flex:1;padding:12px;background:var(--orange);color:#fff;border:none;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif TC',serif;border-bottom:3px solid var(--orange-deep)}
+.btn-primary:hover{background:var(--orange-dark)}
+.btn-secondary{flex:1;padding:12px;background:none;border:1.5px solid var(--orange);color:var(--orange);border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif TC',serif}
+.btn-secondary:hover{background:rgba(201,75,28,.08)}
+.join-input{width:100%;padding:10px 12px;border:1.5px solid rgba(107,58,31,.3);border-radius:3px;font-size:16px;background:var(--bg);color:var(--brown);font-family:'Noto Sans TC',sans-serif;outline:none;text-align:center;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.join-input:focus{border-color:var(--orange)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* ══════════════════════════════════════
+   Firebase Realtime Database 設定
+══════════════════════════════════════ */
+const DB_URL = 'https://tiantianlai-order-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+/* ── Firebase REST API 封裝 ── */
+async function dbGet(path){
+  const r = await fetch(`${DB_URL}/${path}.json`);
+  return r.ok ? r.json() : null;
+}
+async function dbSet(path, data){
+  await fetch(`${DB_URL}/${path}.json`, {method:'PUT', body:JSON.stringify(data)});
+}
+async function dbPush(path, data){
+  const r = await fetch(`${DB_URL}/${path}.json`, {method:'POST', body:JSON.stringify(data)});
+  return r.ok ? (await r.json()).name : null;
+}
+async function dbDelete(path){
+  await fetch(`${DB_URL}/${path}.json`, {method:'DELETE'});
+}
+
+/* Server-Sent Events 即時監聽 */
+let sseSource = null;
+function listenPath(path, cb){
+  if(sseSource){ sseSource.close(); sseSource=null; }
+  sseSource = new EventSource(`${DB_URL}/${path}.json`);
+  sseSource.addEventListener('put', e => {
+    try{ cb(JSON.parse(e.data)); }catch(err){}
+  });
+  sseSource.addEventListener('patch', e => {
+    try{ cb(JSON.parse(e.data)); }catch(err){}
+  });
+}
+
+/* ══════════════════════════════════════
+   SVG LOGO
+══════════════════════════════════════ */
+const LOGO_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity="0.92">
+    <line x1="50" y1="4"  x2="50" y2="14"/>
+    <line x1="50" y1="86" x2="50" y2="96"/>
+    <line x1="4"  y1="50" x2="14" y2="50"/>
+    <line x1="86" y1="50" x2="96" y2="50"/>
+    <line x1="15" y1="15" x2="22" y2="22"/>
+    <line x1="78" y1="78" x2="85" y2="85"/>
+    <line x1="85" y1="15" x2="78" y2="22"/>
+    <line x1="15" y1="85" x2="22" y2="78"/>
+    <line x1="8"  y1="32" x2="17" y2="36"/>
+    <line x1="83" y1="32" x2="92" y2="36"/>
+    <line x1="8"  y1="68" x2="17" y2="64"/>
+    <line x1="83" y1="68" x2="92" y2="64"/>
+    <line x1="32" y1="8"  x2="36" y2="17"/>
+    <line x1="68" y1="8"  x2="64" y2="17"/>
+    <line x1="32" y1="92" x2="36" y2="83"/>
+    <line x1="68" y1="92" x2="64" y2="83"/>
+  </g>
+  <path d="M22 52 Q22 78 50 78 Q78 78 78 52 Z" fill="#fff" opacity="0.95"/>
+  <path d="M26 60 Q50 66 74 60" stroke="#C94B1C" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M28 67 Q50 73 72 67" stroke="#C94B1C" stroke-width="2" fill="none" opacity="0.5"/>
+  <ellipse cx="50" cy="48" rx="16" ry="14" fill="#fff"/>
+  <circle cx="50" cy="31" r="9" fill="#fff"/>
+  <path d="M46 24 Q47 20 50 22 Q50 18 53 21 Q55 18 56 23" fill="#fff"/>
+  <path d="M54 32 L58 33 L54 34 Z" fill="#fff" opacity="0.7"/>
+  <circle cx="52" cy="30" r="1.8" fill="#C94B1C"/>
+  <rect x="36" y="77" width="28" height="5" rx="2" fill="#fff" opacity="0.7"/>
+</svg>`;
+
+/* ══════════════════════════════════════
+   菜單資料
+══════════════════════════════════════ */
+const MENU = [
+  {id:'m1',e:'🍚',n:'經典海南雞飯',en:'Classic Hainan Chicken Rice',
+   d:'鎮店招牌飯・使用國產溫體雞三溫暖熬煮\n配上經典薑蔥醬　一碗就是答案',p:145,c:'主餐'},
+  {id:'m2',e:'🥩',n:'泰式烤霸降豬',en:'Thai Grilled Marbled Pork Rice',
+   d:'沉境式體驗芒提雅的夜\n鮮嫩嫩口的霸降肉，配上傳統泰式醬料\n最後火烤就是美味',p:160,c:'主餐'},
+  {id:'m3',e:'🌶',n:'泰市場打拋豬',en:'Thai Chili Pork Rice',
+   d:'一秒回到泰國街頭！\n爆炒豬肉三肥七瘦，配上經典黑醬油\n人生苦短再來一碗',p:135,c:'主餐'},
+  {id:'d1',e:'👑',n:'經典雙拼',en:'Hainan Chicken With Thai Chili Pork',d:'海南雞＋打拋豬',p:165,c:'雙拼'},
+  {id:'d2',e:'👑',n:'泰泰雙拼',en:'Grilled Marbled Pork With Thai Chili Pork',d:'霸降豬＋打拋豬',p:170,c:'雙拼'},
+  {id:'s1',e:'🍖',n:'單點海南雞',   en:'Hainan Chicken',                 d:'',p:75, c:'小菜'},
+  {id:'s2',e:'🥩',n:'單點霸降豬',   en:'Grilled Marbled Pork',            d:'',p:80, c:'小菜'},
+  {id:'s3',e:'🍳',n:'雞魯飯',       en:'Chicken Braised Pork',            d:'',p:50, c:'小菜'},
+  {id:'s4',e:'🍗',n:'單點麻香炸雞', en:'Thai-Style Spicy Fried Chicken',  d:'',p:100,c:'小菜'},
+  {id:'s5',e:'🍤',n:'金錢蝦餅（3入）',en:'Golden Shrimp Cake',            d:'',p:85, c:'小菜'},
+  {id:'s6',e:'🍚',n:'雞汁白飯',     en:'Chicken Oil Rice',                d:'',p:30, c:'小菜'},
+  {id:'r1',e:'🧋',n:'天天來紅茶',   en:'Black Tea',                       d:'',p:25, c:'飲料'},
+  {id:'r2',e:'🧋',n:'泰泰式奶茶',   en:'Thai Milk Tea',                   d:'',p:45, c:'飲料'},
+];
+const CATS = ['主餐','雙拼','小菜','飲料'];
+const CAT_META = {
+  '主餐':{label:'主　餐',en:'Main Dish',icon:'🍽'},
+  '雙拼':{label:'滿足雙拼',en:'Double Main Dish',icon:'👑'},
+  '小菜':{label:'其他小菜',en:'Side Dish',icon:'🥗'},
+  '飲料':{label:'解渴一下',en:'Drinks',icon:'🧋'},
+};
+
+/* ══════════════════════════════════════
+   APP STATE
+══════════════════════════════════════ */
+let st = {
+  screen: 'setup',   // setup | order | summary
+  roomId: null,
+  isHost: false,
+  name: '', note: '',
+  qty: {},
+  orders: {},        // key→order object (from Firebase)
+  toast: '', toastType: 'ok',
+  loading: false,
+  myOrderKey: null,
+};
+
+/* 從 URL hash 讀取 roomId */
+function getRoomFromHash(){
+  const h = location.hash.replace('#','').trim().toUpperCase();
+  return h.length === 6 ? h : null;
+}
+function setHashRoom(id){
+  location.hash = id;
+}
+
+/* 6碼房間 ID */
+function genRoomId(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = '';
+  for(let i=0;i<6;i++) id += chars[Math.floor(Math.random()*chars.length)];
+  return id;
+}
+
+/* 初始化：若 URL 帶有 hash room 則直接進點餐頁 */
+(function init(){
+  const rid = getRoomFromHash();
+  if(rid){
+    st.roomId = rid;
+    st.screen = 'order';
+    st.isHost = false;
+    startListening();
+  }
+})();
+
+/* ══════════════════════════════════════
+   Firebase 操作
+══════════════════════════════════════ */
+function startListening(){
+  listenPath(`rooms/${st.roomId}/orders`, data => {
+    st.orders = data || {};
+    if(st.screen === 'summary' || st.screen === 'order') render();
+  });
+}
+
+async function createRoom(){
+  st.loading = true; render();
+  const rid = genRoomId();
+  await dbSet(`rooms/${rid}`, {created: Date.now(), orders: {}});
+  st.roomId = rid;
+  st.isHost = true;
+  st.screen = 'summary';
+  setHashRoom(rid);
+  startListening();
+  st.loading = false;
+  showToast(`收單室已建立！房間代碼：${rid}`, 'ok');
+  render();
+}
+
+async function joinRoom(rid){
+  st.loading = true; render();
+  rid = rid.trim().toUpperCase();
+  if(rid.length !== 6){ showToast('請輸入正確的 6 碼代碼','err'); st.loading=false; render(); return; }
+  const data = await dbGet(`rooms/${rid}`);
+  if(!data){ showToast('找不到此房間，請確認代碼','err'); st.loading=false; render(); return; }
+  st.roomId = rid;
+  st.isHost = false;
+  st.screen = 'order';
+  setHashRoom(rid);
+  startListening();
+  st.loading = false;
+  render();
+}
+
+async function submitOrder(){
+  if(!st.name.trim() || !cnt()) return;
+  const items = MENU.filter(m=>(st.qty[m.id]||0)>0).map(m=>({n:m.n,qty:st.qty[m.id],p:m.p}));
+  const order = {
+    name: st.name.trim(),
+    note: st.note.trim(),
+    items,
+    total: tot(),
+    time: Date.now()
+  };
+  st.loading = true; render();
+  const key = await dbPush(`rooms/${st.roomId}/orders`, order);
+  st.myOrderKey = key;
+  st.qty = {}; st.name = ''; st.note = '';
+  st.screen = 'summary';
+  st.loading = false;
+  showToast('訂單已送出！', 'ok');
+  render();
+}
+
+async function removeOrder(key){
+  await dbDelete(`rooms/${st.roomId}/orders/${key}`);
+}
+
+async function clearAllOrders(){
+  if(!confirm('確定清除所有訂單？此動作無法復原。')) return;
+  await dbSet(`rooms/${st.roomId}/orders`, {});
+}
+
+/* ══════════════════════════════════════
+   工具函式
+══════════════════════════════════════ */
+const tot = () => MENU.reduce((s,m)=>s+(st.qty[m.id]||0)*m.p, 0);
+const cnt = () => MENU.reduce((s,m)=>s+(st.qty[m.id]||0), 0);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const nl2br = s => esc(s).replace(/\n/g,'<br>');
+const ini = n => n ? n.charAt(0).toUpperCase() : '?';
+
+function showToast(msg, type='ok'){
+  st.toast = msg; st.toastType = type;
+  setTimeout(()=>{ st.toast=''; render(); }, 3500);
+}
+
+function getOrderList(){
+  if(!st.orders) return [];
+  return Object.entries(st.orders)
+    .filter(([k,v])=>v && v.name)
+    .sort((a,b)=>(a[1].time||0)-(b[1].time||0));
+}
+
+function fmtTxt(){
+  const list = getOrderList();
+  let L = ['╔══════════════════════╗','║  天天來海南雞・辦公室訂單  ║','╚══════════════════════╝','',`房間代碼：${st.roomId}`,''];
+  let g = 0;
+  list.forEach(([k,o],i)=>{
+    L.push(`${i+1}.【${o.name}】`);
+    (o.items||[]).forEach(it=>L.push(`   ${it.n} ×${it.qty}　NT$${it.p*it.qty}`));
+    if(o.note) L.push(`   ⚠ 備註：${o.note}`);
+    L.push(`   小計 NT$${o.total}`);
+    g+=o.total; L.push('');
+  });
+  L.push('──────────────────────');
+  L.push(`共 ${list.length} 人・合計 NT$${g}`);
+  L.push('天天來海南雞　用心做雞 🐔');
+  return L.join('\n');
+}
+
+function copyRoomLink(){
+  const url = `${location.origin}${location.pathname}#${st.roomId}`;
+  navigator.clipboard.writeText(url).then(()=>showToast('已複製連結！分享給同仁即可開始點餐','ok'))
+    .catch(()=>{ prompt('複製此連結分享給同仁：', url); });
+}
+
+/* ══════════════════════════════════════
+   RENDER
+══════════════════════════════════════ */
+function render(){
+  const el = document.getElementById('root');
+  const orderList = getOrderList();
+  const oc = orderList.length;
+  const gd = orderList.reduce((s,[k,o])=>s+(o.total||0), 0);
+  let h = '';
+
+  /* HEADER */
+  h += `<div class="header">
+    <div class="stripe-top"></div>
+    <div class="header-body">
+      <div class="logo-wrap">${LOGO_SVG}</div>
+      <div class="header-text">
+        <div class="h-brand">天天來海南雞</div>
+        <div class="h-en">TIANTIAN LAI · HAINANESE CHICKEN RICE</div>
+      </div>
+      <div class="h-tag">用心做雞</div>
+    </div>
+    <div class="stripe-btm"></div>
+  </div>`;
+
+  /* 房間資訊欄（有房間時顯示） */
+  if(st.roomId){
+    h += `<div class="room-bar">
+      <span class="live-dot"></span>
+      <span class="live-label">即時同步・房間代碼</span>
+      <span class="room-id">${st.roomId}</span>
+      <button class="room-copy" onclick="copyRoomLink()">📎 複製連結</button>
+    </div>`;
+  }
+
+  /* TABS（有房間時顯示） */
+  if(st.roomId){
+    h += `<div class="tabs">
+      <button class="tab ${st.screen==='order'?'on':''}" onclick="st.screen='order';render()">🍽 我要點餐</button>
+      <button class="tab ${st.screen==='summary'?'on':''}" onclick="st.screen='summary';render()">📋 收單總覽${oc>0?`<span class="badge">${oc}</span>`:''}</button>
+    </div>`;
+  }
+
+  h += `<div class="content">`;
+  if(st.toast) h += `<div class="toast ${st.toastType}">✓ ${esc(st.toast)}</div>`;
+  if(st.loading){
+    h += `<div class="loading"><span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span></div>`;
+    h += `</div>`; el.innerHTML = h; return;
+  }
+
+  /* ── 設定畫面 ── */
+  if(st.screen === 'setup'){
+    h += `<div class="room-setup">
+      <div class="room-setup-title">開始收單</div>
+      <div class="room-setup-sub">建立一個收單室，把連結分享給同仁<br>所有人的訂單將即時同步，方便你一次傳給店家</div>
+      <div class="room-setup-btns">
+        <button class="btn-primary" onclick="createRoom()">＋ 建立收單室</button>
+      </div>
+    </div>
+    <div class="room-setup" style="margin-top:12px">
+      <div class="room-setup-title" style="font-size:14px">已有連結？直接加入</div>
+      <input class="join-input" id="join-code" type="text" placeholder="輸入 6 碼代碼" maxlength="6">
+      <button class="btn-secondary" style="width:100%" onclick="joinRoom(document.getElementById('join-code').value)">加入點餐</button>
+    </div>`;
+
+  /* ── 點餐畫面 ── */
+  } else if(st.screen === 'order'){
+    h += `<div class="input-box">
+      <div class="ilbl">你的姓名 <span class="req">*</span></div>
+      <input class="inp" type="text" placeholder="請輸入姓名（例如：小明）" value="${esc(st.name)}" oninput="st.name=this.value;render()" maxlength="20">
+      <textarea class="txta" placeholder="備註：辣度・忌口・特殊需求（可不填）" rows="2" oninput="st.note=this.value;render()">${esc(st.note)}</textarea>
+    </div>`;
+
+    CATS.forEach(c=>{
+      const items = MENU.filter(m=>m.c===c);
+      const meta = CAT_META[c];
+      h += `<div class="sec-hd">
+        <div class="sec-line"></div>
+        <div class="sec-inner">${meta.icon} ${meta.label} <span style="opacity:.7;font-weight:400;font-size:9.5px;letter-spacing:.08em">${meta.en}</span></div>
+        <div class="sec-line"></div>
+      </div>`;
+      items.forEach(m=>{
+        const q = st.qty[m.id]||0;
+        h += `<div class="mcard ${q>0?'sel':''}">
+          <div class="mcard-emoji">${m.e}</div>
+          <div class="mcard-info">
+            <div class="mcard-name">${m.n}</div>
+            <div class="mcard-en">${m.en}</div>
+            ${m.d?`<div class="mcard-desc">${nl2br(m.d)}</div>`:''}
+            <div class="mcard-price">NT$ ${m.p}</div>
+          </div>
+          <div class="qty">
+            <button class="qbtn ${q===0?'z':''}" onclick="st.qty['${m.id}']=Math.max(0,(st.qty['${m.id}']||0)-1);render()">−</button>
+            <span class="qnum">${q}</span>
+            <button class="qbtn" onclick="st.qty['${m.id}']=(st.qty['${m.id}']||0)+1;render()">＋</button>
+          </div>
+        </div>`;
+      });
+    });
+
+    const t=tot(), k=cnt();
+    if(k>0) h += `<div class="sumbar"><span class="suml">已選 ${k} 項餐點</span><span class="sumr">NT$ ${t}</span></div>`;
+    const ok = st.name.trim() && k>0;
+    h += `<button class="sub-btn" onclick="submitOrder()" ${!ok?'disabled':''}>
+      ${!st.name.trim()?'請先輸入姓名':k===0?'請選擇至少一項餐點':'確認送出訂單　NT$ '+t}
+    </button>`;
+
+  /* ── 收單總覽 ── */
+  } else if(st.screen === 'summary'){
+    if(!oc){
+      h += `<div class="empty">
+        <div class="empty-ico">🍚</div>
+        <div class="empty-t">等待同仁點餐中…</div>
+        <div class="empty-s">將連結分享給同仁，訂單將即時出現在這裡</div>
+      </div>`;
+      h += `<button class="copy-btn" onclick="copyRoomLink()">📎 複製點餐連結（分享給同仁）</button>`;
+    } else {
+      const totalDishes = orderList.reduce((s,[k,o])=>s+(o.items||[]).reduce((a,i)=>a+i.qty,0),0);
+      h += `<div class="grand">
+        <div>
+          <div class="grand-lbl"><span class="live-dot"></span>即時同步中</div>
+          <div class="grand-amt">NT$ ${gd}</div>
+          <div class="grand-cnt">共 ${oc} 人 · ${totalDishes} 份餐點</div>
+        </div>
+        <div class="grand-logo">${LOGO_SVG}</div>
+      </div>`;
+      h += `<button class="copy-btn" onclick="cpyOrder()">📋 複製完整訂單（傳給店家）</button>`;
+      h += `<button class="copy-btn" style="background:rgba(107,58,31,.12);color:var(--brown-mid);border-bottom-color:transparent;margin-bottom:12px" onclick="copyRoomLink()">📎 繼續分享點餐連結</button>`;
+      h += `<div class="divider"><div class="div-line"></div><div class="div-dot"></div><div class="div-line"></div></div>`;
+
+      orderList.forEach(([key,o])=>{
+        h += `<div class="ocard">
+          <div class="ohead">
+            <div class="operson"><div class="pav">${ini(o.name)}</div>${esc(o.name)}</div>
+            <div class="ototal">NT$ ${o.total}</div>
+          </div>`;
+        (o.items||[]).forEach(it=>h+=`<div class="orow"><span>${esc(it.n)} ×${it.qty}</span><span>NT$ ${it.p*it.qty}</span></div>`);
+        if(o.note) h+=`<div class="onote">📝 備註：${esc(o.note)}</div>`;
+        h+=`<button class="rmbtn" onclick="removeOrder('${key}')">✕ 移除此筆</button></div>`;
+      });
+      h += `<button class="clr-btn" onclick="clearAllOrders()">清除所有訂單（重新開始收單）</button>`;
+    }
+  }
+
+  h += `</div><div class="footer">天天來海南雞飯有限公司 · EST. 2023 · 用心做雞</div>`;
+  el.innerHTML = h;
+}
+
+function cpyOrder(){
+  navigator.clipboard.writeText(fmtTxt()).then(()=>showToast('已複製！直接貼到 LINE 傳給店家即可','ok'))
+    .catch(()=>prompt('複製以下內容：', fmtTxt()));
+}
+
+render();
+</script>
+</body>
+</html>
